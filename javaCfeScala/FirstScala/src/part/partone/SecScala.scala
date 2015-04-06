@@ -45,12 +45,49 @@ class SecScala {
     val BLUE = "Blue"
    val RED = "Red"
   }  
-  def calcType(calc: Calculator) = calc match{
-    case calc.brand == "hp" && calc.model == "20B" => "financial"
-    case calc.brand == "hp" && calc.model == "48G" => "scientific"
-    case calc.brand == "hp" && calc.model == "30B" => "business"
-    case => "unknown"
-      
-  }
+//  def calcType(calc: Calculator) = calc match{
+//    case calc.brand == "hp" && calc.model == "20B" => "financial"
+//    case calc.brand == "hp" && calc.model == "48G" => "scientific"
+//    case calc.brand == "hp" && calc.model == "30B" => "business"
+//    case => "unknown"      
+//  }
+  case class Calculator(brand: String, model: String);
   
+//  val hp20b = Calculator("hp", "20b");
+  
+//   val hp20b = Calculator("hp", "20b");
+   
+   val hp20B = Calculator("hp", "20b");
+   
+   hp20b == hp20B;
+   
+ val hp20b = Calculator("hp", "20B")
+val hp30b = Calculator("hp", "30B")
+
+def calcType(calc: Calculator) = calc match {
+  case Calculator("hp", "20B") => "financial"
+  case Calculator("hp", "48G") => "scientific"
+  case Calculator("hp", "30B") => "business"
+  case Calculator(ourBrand, ourModel) => "Calculator: %s %s is of unknown type".format(ourBrand, ourModel)
+  case c@Calculator(_, _) => "Calculator: %s of unknown type".format(c)
+}
+ 
+ try {
+  remoteCalculatorService.add(1, 2)
+} catch {
+  case e: ServerIsDownException => log.error(e, "the remote calculator service is unavailble. should have kept your trustry HP.")
+} finally {
+  remoteCalculatorService.close()
+}
+
+val result: Int = try {
+  remoteCalculatorService.add(1, 2)
+} catch {
+  case e: ServerIsDownException => {
+    log.error(e, "the remote calculator service is unavailble. should have kept your trustry HP.")
+    0
+  }
+} finally {
+  remoteCalculatorService.close()
+}
 }
